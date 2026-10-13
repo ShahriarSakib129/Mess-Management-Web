@@ -10,6 +10,7 @@
   <section class="login-panel"><div class="login-card"><p class="eyebrow">MEMBER PORTAL</p><h2>Welcome back</h2><p class="muted">Sign in with the Mess ID your admin gave you.</p>
     {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}" role="alert">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
     <form method="post" class="form-stack" novalidate>
+<input type="hidden" name="csrf_token" value="{{ csrf_token }}">
       <label>Mess ID or email<input name="mess_id" autocomplete="username" required placeholder="e.g. MM-024"></label>
       <label>Password<div class="password-field"><input id="password" type="password" name="password" autocomplete="current-password" required placeholder="Enter your password"><button type="button" data-password-toggle aria-label="Show password">Show</button></div></label>
       <label class="checkbox-row"><input type="checkbox" name="remember"> <span>Keep me signed in for 30 days</span></label>
