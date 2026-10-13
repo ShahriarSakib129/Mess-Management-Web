@@ -101,3 +101,22 @@ def test_admin_closing_locks_period(client, app):
     assert response.status_code == 200
     with app.app_context():
         assert AccountingPeriod.query.first().status == "closed"
+
+
+def test_admin_can_create_member_with_csrf_form(client, app):
+    login(client, "admin", "DemoAdmin!2026")
+    token = csrf(client)
+    response = client.post("/admin/members", data={
+        "csrf_token": token,
+        "full_name": "New Member",
+        "mess_id": "new-member-01",
+        "email": "new@example.com",
+        "phone": "01700000000",
+        "role": "member",
+        "joined_on": "2026-10-01",
+        "opening_balance": "0",
+        "password": "Temporary!2026",
+    })
+    assert response.status_code == 200
+    with app.app_context():
+        assert User.query.filter_by(mess_id="new-member-01").one().full_name == "New Member"
