@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}MessMate{% endblock %} · Smart Mess Management</title>
+  <meta name="description" content="MessMate keeps shared mess meals, expenses, payments, and month-end accounts transparent.">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <script defer src="{{ url_for('static', filename='js/app.js') }}"></script>
+</head>
+<body>
+{% if current_user %}
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="brand-mark">M</span><span><strong>MessMate</strong><small>Shared accounts, clear.</small></span></div>
+      <nav class="nav-stack" aria-label="Primary navigation">
+        <a class="nav-link {% if section == 'dashboard' %}active{% endif %}" href="{{ url_for('main.dashboard') }}"><span>⌂</span>Overview</a>
+        <p class="nav-label">My account</p>
+        <a class="nav-link {% if section == 'statement' %}active{% endif %}" href="{{ url_for('main.statement') }}"><span>▤</span>Statement</a>
+        <a class="nav-link {% if section == 'meals' %}active{% endif %}" href="{{ url_for('main.member_meals') }}"><span>◒</span>Meal history</a>
+        <a class="nav-link {% if section == 'bazar' %}active{% endif %}" href="{{ url_for('main.member_bazar') }}"><span>◌</span>Bazar records</a>
+        <a class="nav-link {% if section == 'payments' %}active{% endif %}" href="{{ url_for('main.member_payments') }}"><span>৳</span>Payments</a>
+        <a class="nav-link {% if section == 'notifications' %}active{% endif %}" href="{{ url_for('main.notifications') }}"><span>◔</span>Notifications</a>
+        {% if current_user.role in ['admin', 'manager'] %}
+        <p class="nav-label">Operations</p>
+        <a class="nav-link {% if section == 'manager-meals' %}active{% endif %}" href="{{ url_for('main.manager_meals') }}"><span>＋</span>Daily meals</a>
+        <a class="nav-link {% if section == 'manager-bazar' %}active{% endif %}" href="{{ url_for('main.manager_bazar') }}"><span>↗</span>Bazar entry</a>
+        <a class="nav-link {% if section == 'cashbook' %}active{% endif %}" href="{{ url_for('main.cashbook') }}"><span>▥</span>Cashbook</a>
+        <a class="nav-link {% if section == 'handover' %}active{% endif %}" href="{{ url_for('main.handover') }}"><span>⇄</span>Handover</a>
+        {% endif %}
+        {% if current_user.role == 'admin' %}
+        <p class="nav-label">Admin control</p>
+        <a class="nav-link {% if section == 'members' %}active{% endif %}" href="{{ url_for('main.members') }}"><span>◉</span>Members</a>
+        <a class="nav-link {% if section == 'manager' %}active{% endif %}" href="{{ url_for('main.manager_assignment') }}"><span>✦</span>Manager assignment</a>
+        <a class="nav-link {% if section == 'closing' %}active{% endif %}" href="{{ url_for('main.closing') }}"><span>▣</span>Monthly closing</a>
+        <a class="nav-link {% if section == 'audit' %}active{% endif %}" href="{{ url_for('main.audit_logs') }}"><span>⌁</span>Audit trail</a>
+        {% endif %}
+      </nav>
+      <div class="sidebar-foot"><div class="trust-dot"></div><span>Secure session<br><small>Asia/Dhaka · BDT</small></span></div>
+    </aside>
+    <main class="main-panel">
+      <header class="topbar">
+        <button class="icon-button menu-button" data-menu-toggle aria-label="Open navigation">☰</button>
+        <div class="top-context"><span class="eyebrow">Current accounting period</span><strong>{{ period.label if period is defined and period else 'Getting started' }}</strong></div>
+        <div class="top-actions"><a class="notification-pill" href="{{ url_for('main.notifications') }}" aria-label="Notifications">◔ {% if notifications is defined and notifications %}<b>{{ notifications|length }}</b>{% endif %}</a><div class="avatar">{{ current_user.full_name[:1] }}</div><div class="profile-text"><strong>{{ current_user.full_name }}</strong><small>{{ current_user.role|capitalize }} · {{ current_user.mess_id }}</small></div><a class="logout-link" href="{{ url_for('main.logout') }}">Sign out</a></div>
+      </header>
+      <div class="content-wrap">
+        {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}" role="status">{{ message }}<button data-dismiss aria-label="Dismiss">×</button></div>{% endfor %}</div>{% endif %}{% endwith %}
+        {% block content %}{% endblock %}
+      </div>
+      <footer class="footer">MessMate · Built for transparent shared living accounts · <a href="{{ url_for('main.export_csv') }}">Export my statement</a></footer>
+    </main>
+  </div>
+{% else %}{% block unauthenticated %}{% endblock %}{% endif %}
+</body>
+</html>
