@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: messmate
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_BOOTSTRAP_SECRET
+        sync: false
+      - key: APP_ENV
+        value: production
+      - key: COOKIE_SECURE
+        value: "true"
