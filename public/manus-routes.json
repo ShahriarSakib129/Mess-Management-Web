@@ -1,0 +1,20 @@
+{
+  "routes": [
+    {"path": "/", "title": "Login"},
+    {"path": "/dashboard", "title": "Dashboard"},
+    {"path": "/member/statement", "title": "Account statement"},
+    {"path": "/member/meals", "title": "Meal history"},
+    {"path": "/member/bazar", "title": "Bazar records"},
+    {"path": "/member/payments", "title": "Payment history"},
+    {"path": "/notifications", "title": "Notifications"},
+    {"path": "/manager/meals", "title": "Meal entry"},
+    {"path": "/manager/bazar", "title": "Bazar entry"},
+    {"path": "/manager/cashbook", "title": "Cashbook"},
+    {"path": "/manager/handover", "title": "Manager handover"},
+    {"path": "/admin/members", "title": "Member management"},
+    {"path": "/admin/manager", "title": "Manager assignment"},
+    {"path": "/admin/closing", "title": "Monthly closing"},
+    {"path": "/admin/audit", "title": "Audit logs"},
+    {"path": "/reports/export.csv", "title": "Export report"}
+  ]
+}
